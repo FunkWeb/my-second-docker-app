@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "type": "module",
+  "main": "dist/index.mjs",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "node build.mjs",
+    "start": "node dist/index.mjs"
+  },
+  "dependencies": {
+    "bullmq": "^5",
+    "ioredis": "^5",
+    "pino": "^10"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "esbuild": "^0.25",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
