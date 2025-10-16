@@ -1,5 +1,5 @@
 import {Queue, QueueEvents} from 'bullmq';
-import redis from './redis.js';
+import {redis} from './redis';
 
 async function main() {
   const queueName = 'ping';

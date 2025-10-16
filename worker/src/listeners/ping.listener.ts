@@ -1,6 +1,6 @@
 import {Worker, type Job} from 'bullmq';
-import redis from '../redis.js';
-import pingJob from '../jobs/ping.job.js';
+import {redis} from '../redis';
+import pingJob from '../jobs/ping.job';
 
 const QUEUE_NAME = 'ping';
 

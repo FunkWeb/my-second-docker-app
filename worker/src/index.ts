@@ -1,6 +1,6 @@
-import listenToPing from './listeners/ping.listener.js';
-import listenToTasks from './listeners/task.listener.js';
-import redis from "./redis";
+import listenToPing from './listeners/ping.listener';
+import listenToTasks from './listeners/task.listener';
+import {redis} from "./redis";
 import {Queue} from "bullmq";
 
 listenToPing().then(() => {

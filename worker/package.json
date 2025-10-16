@@ -13,11 +13,8 @@
     "pino": "^10"
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "^24",
     "esbuild": "^0.25",
     "typescript": "^5"
-  },
-  "engines": {
-    "node": ">=22"
   }
 }

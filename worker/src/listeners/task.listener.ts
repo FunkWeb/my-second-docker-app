@@ -1,6 +1,6 @@
 import {Worker, type Job} from 'bullmq';
-import redis from '../redis.js';
-import taskJob from '../jobs/task.job.js';
+import {redis} from '../redis';
+import taskJob from '../jobs/task.job';
 
 const QUEUE_NAME = 'tasks';
 
