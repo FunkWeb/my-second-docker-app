@@ -4,10 +4,12 @@ Boilerplate for a minimal REST API using **Express 5**, **TypeScript**, and **ro
 
 ## Stack
 
-- Express 5
-- routing-controllers, class-validator, class-transformer
-- helmet, cors, morgan
-- TypeScript
+* Express 5
+* routing-controllers, class-validator, class-transformer
+* helmet, cors, morgan, multer
+* BullMQ, Redis/Valkey
+* PostgreSQL
+* TypeScript, TSX/TSC
 
 ## Usage
 

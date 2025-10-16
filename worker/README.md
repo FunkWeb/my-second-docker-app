@@ -2,11 +2,9 @@
 
 ## Stack
 
-* BullMQ
+* BullMQ, Redis/Valkey
 * PostgreSQL
-* Redis/Valkey
-* TypeScript
-* ESBuild
+* TypeScript, ESBuild
 
 ## Usage
 
