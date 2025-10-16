@@ -1,52 +1,19 @@
-import {Queue, QueueEvents} from 'bullmq';
-import {redis} from './redis';
+import {postgres} from './postgres.js';
+import {redis} from './redis.js';
 
-async function main() {
-  const queueName = 'ping';
-  const queue = new Queue(queueName, {connection: redis});
-  const events = new QueueEvents(queueName, {connection: redis});
+async function healthcheck() {
+  try {
+    await redis.ping();
+    await postgres.query('select 1')
 
-  await events.waitUntilReady();
-
-  const job = await queue.add('ping', {});
-
-  const timeout = setTimeout(async () => {
-    console.error('Healthcheck: timeout waiting for pong');
-
-    await cleanup(1);
-  }, 5000);
-
-  events.on('completed', async ({jobId, returnvalue}) => {
-    if (jobId === job.id && returnvalue === 'pong') {
-      clearTimeout(timeout);
-
-      await cleanup(0);
-    }
-  });
-
-  events.on('failed', async ({jobId, failedReason}) => {
-    if (jobId === job.id) {
-      clearTimeout(timeout);
-
-      console.error('Healthcheck: job failed:', failedReason);
-
-      await cleanup(1);
-    }
-  });
-
-  async function cleanup(code: number) {
-    try {
-      await queue.close();
-      await events.close();
-      await redis.quit();
-    } finally {
-      process.exit(code);
-    }
+    process.exit(0);
+  } catch (err) {
+    console.error(err)
+    process.exit(1);
+  } finally {
+    await redis.quit();
+    await postgres.end();
   }
 }
 
-main().catch((err) => {
-  console.error('Healthcheck: error:', err);
-
-  process.exit(1);
-});
+await healthcheck();

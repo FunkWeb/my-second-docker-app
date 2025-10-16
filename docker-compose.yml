@@ -42,7 +42,7 @@ services:
       DATABASE_URL: postgresql://pguser:notsecurepassword@pgsql:5432/pgdb
       REDIS_URL: redis://valkey:6379
     healthcheck:
-      test: [ "CMD", "node", "dist/healthcheck.mjs" ]
+      test: [ "CMD", "node", "dist/healthcheck.js" ]
       interval: 5s
       timeout: 3s
       retries: 10

@@ -5,7 +5,9 @@ import taskJob from '../jobs/task.job';
 const QUEUE_NAME = 'tasks';
 
 export default async function listenToTasks() {
-  const worker = new Worker(QUEUE_NAME, taskJob, {connection: redis});
+  const worker = new Worker(QUEUE_NAME, taskJob, {
+    connection: redis,
+  });
 
   worker.on('ready', () => {
     // TODO: on task ready

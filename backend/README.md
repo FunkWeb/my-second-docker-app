@@ -25,6 +25,7 @@ npm run build
 npm run start
 ```
 
-## Health/Test Route
+## Health/Test Routes
 
 GET `/api/v1/health`
+GET `/api/v1/ping`

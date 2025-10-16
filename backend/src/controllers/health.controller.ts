@@ -4,6 +4,9 @@ import {JsonController, Get} from 'routing-controllers';
 export class HealthController {
   @Get('/')
   get() {
-    return {status: 'ok', uptime: process.uptime()};
+    return {
+      status: 'ok',
+      uptime: process.uptime(),
+    };
   }
 }

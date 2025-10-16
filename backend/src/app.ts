@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import {useExpressServer} from 'routing-controllers';
 import {errorHandler} from './middlewares/error.handler.js';
 import {HealthController} from './controllers/health.controller.js';
+import {PingController} from "./controllers/ping.controller.js";
 
 const app = express();
 
@@ -16,7 +17,10 @@ app.use(morgan('dev'));
 
 useExpressServer(app, {
   routePrefix: '/api/v1',
-  controllers: [HealthController], // TODO: add more controllers
+  controllers: [ // TODO: add more controllers
+    HealthController,
+    PingController,
+  ],
   validation: true,
   classTransformer: true,
   defaultErrorHandler: false,
