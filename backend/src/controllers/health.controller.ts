@@ -1,8 +1,9 @@
-import type {Request, Response} from 'express';
+import {JsonController, Get} from 'routing-controllers';
 
-export const health = (_req: Request, res: Response) => {
-  res.json({
-    status: 'ok',
-    uptime: process.uptime(),
-  });
-};
+@JsonController('/health')
+export class HealthController {
+  @Get('/')
+  get() {
+    return {status: 'ok', uptime: process.uptime()};
+  }
+}
