@@ -16,7 +16,7 @@ app.use(morgan('dev'));
 
 useExpressServer(app, {
   routePrefix: '/api/v1',
-  controllers: [HealthController],
+  controllers: [HealthController], // TODO: add more controllers
   validation: true,
   classTransformer: true,
   defaultErrorHandler: false,
