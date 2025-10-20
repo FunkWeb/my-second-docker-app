@@ -46,3 +46,17 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  api:
+    depends_on: [ pgsql, valkey, worker ]
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+        NODE_ENV: production
+        DATABASE_URL: postgresql://pguser:notsecurepassword@pgsql:5432/pgdb
+        REDIS_URL: redis://valkey:6379
+
+    ports:
+      - "4000:4000"
