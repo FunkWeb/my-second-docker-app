@@ -1,32 +1,24 @@
-import {Worker, type Job} from 'bullmq';
-import {redis} from '../redis';
-import taskJob from '../jobs/task.job';
+import { Worker, Job } from 'bullmq';
+import { redis } from '../redis.js';
+import taskJob from '../jobs/task.job.js';
+import {Task} from "../types/task.type";
 
-const QUEUE_NAME = 'tasks';
+export default function listenToTasks() {
+  const worker = new Worker<Task>('tasks', taskJob, { connection: redis });
 
-export default async function listenToTasks() {
-  const worker = new Worker(QUEUE_NAME, taskJob, {
-    connection: redis,
+  worker.on('ready', () => console.log(`[tasks] Worker ready`));
+
+  worker.on('active', async (job: Job<Task>) => {
+    await job.updateData({ ...job.data, status: 'active', startedAt: new Date().toISOString() });
   });
 
-  worker.on('ready', () => {
-    // TODO: on task ready
+  worker.on('completed', async (job: Job<Task>, result) => {
+    await job.updateData({ ...job.data, status: 'completed', completedAt: new Date().toISOString(), result });
   });
 
-  worker.on('active', (job: Job) => {
-    // TODO: on task active
-  });
-
-  worker.on('completed', (job: Job, result: unknown) => {
-    // TODO: on task completed
-  });
-
-  worker.on('failed', (job: Job | undefined, err: Error) => {
-    // TODO: on task failed
-  });
-
-  worker.on('error', (err: Error) => {
-    // TODO: on task error
+  worker.on('failed', async (job: Job<Task> | undefined, err: Error) => {
+    if (!job) return;
+    await job.updateData({ ...job.data, status: 'failed', failedAt: new Date().toISOString(), error: err.message });
   });
 
   return worker;
