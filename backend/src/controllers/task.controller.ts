@@ -1,9 +1,10 @@
 import { JsonController, Get, Post, Put, Delete, Param, Body, HttpCode, NotFoundError, BadRequestError } from 'routing-controllers';
+import { tasksQueue } from '../queues/tasks.queue.js';
 import { postgres } from '../postgres.js';
 
-@JsonController('/tasks')
+@JsonController('/task')
 export class TaskController {
-  @Get('/')
+  @Get('s/')
   async getAllTasks() {
     const result = await postgres.query(
       'SELECT * FROM tasks ORDER BY created_at DESC'
@@ -16,7 +17,7 @@ export class TaskController {
   }
 
   @Get('/:id')
-  async getTaskById(@Param('id') id: string) {
+  async getTaskById(@Param('id') id: bigint) {
     const result = await postgres.query(
       'SELECT * FROM tasks WHERE id = $1',
       [id]
@@ -41,82 +42,41 @@ export class TaskController {
       throw new BadRequestError('Title is required');
     }
 
-    const result = await postgres.query(
-      `INSERT INTO tasks (title, description, status)
-       VALUES ($1, $2, $3)
-       RETURNING *`,
-      [title, description || '', 'todo']
-    );
+    const job = await tasksQueue.add('create-task', {
+      title,
+      description: description || ''
+    });
 
     return {
       success: true,
-      data: result.rows[0]
+      jobId: job.id
     };
   }
 
   @Put('/:id')
   async updateTask(
-    @Param('id') id: string,
-    @Body() body: { title?: string; description?: string; completed?: boolean }
+    @Param('id') id: bigint,
+    @Body() body: { title?: string; description?: string; status?: string }
   ) {
-    const { title, description, completed } = body;
-
-    const updates: string[] = [];
-    const values: any[] = [];
-    let paramCount = 1;
-
-    if (title !== undefined) {
-      updates.push(`title = $${paramCount++}`);
-      values.push(title);
-    }
-    if (description !== undefined) {
-      updates.push(`description = $${paramCount++}`);
-      values.push(description);
-    }
-    if (completed !== undefined) {
-      updates.push(`status = $${paramCount++}`);
-      values.push(completed ? 'completed' : 'pending');
-    }
-
-    if (updates.length === 0) {
-      throw new BadRequestError('No fields to update');
-    }
-
-    updates.push(`updated_at = NOW()`);
-    values.push(id);
-
-    const result = await postgres.query(
-      `UPDATE tasks
-       SET ${updates.join(', ')}
-       WHERE id = $${paramCount}
-       RETURNING *`,
-      values
-    );
-
-    if (result.rows.length === 0) {
-      throw new NotFoundError('Task not found');
-    }
+    const job = await tasksQueue.add('update-task', {
+      id,
+      ...body
+    });
 
     return {
       success: true,
-      data: result.rows[0]
+      jobId: job.id
     };
   }
 
   @Delete('/:id')
-  async deleteTask(@Param('id') id: string) {
-    const result = await postgres.query(
-      'DELETE FROM tasks WHERE id = $1 RETURNING id',
-      [id]
-    );
-
-    if (result.rows.length === 0) {
-      throw new NotFoundError('Task not found');
-    }
+  @HttpCode(202)
+  async deleteTask(@Param('id') id: bigint) {
+    const job = await tasksQueue.add('delete-task', { id });
 
     return {
       success: true,
-      message: 'Task deleted successfully'
+      jobId: job.id
     };
   }
 }
