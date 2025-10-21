@@ -46,3 +46,28 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  backend:
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://pguser:notsecurepassword@pgsql:5432/pgdb
+      REDIS_URL: redis://valkey:6379
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/v1/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+      
