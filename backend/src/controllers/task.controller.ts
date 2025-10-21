@@ -19,10 +19,8 @@ export default class TaskController {
       'INSERT INTO tasks (id, title, description, status, created_at) VALUES ($1, $2, $3, $4, $5)',
       [task.id, task.title, task.description, task.status, task.createdAt]
     );
-    await tasksQueue.add('process-task', task, {
-      removeOnComplete: true,
-      removeOnFail: false,
-    });
+    await tasksQueue.add('create-task', task, { removeOnComplete: true, removeOnFail: false });
+
 
     return task;
   }
@@ -52,10 +50,8 @@ export default class TaskController {
       throw new HttpError(404, 'Task not found');
     }
     const task: Task = result.rows[0];
-    await tasksQueue.add('process-task', task, {
-      removeOnComplete: true,
-      removeOnFail: false,
-    });
+    await tasksQueue.add('delete-task', task, { removeOnComplete: true, removeOnFail: false });
+
     return result.rows[0];
   }
 
@@ -73,10 +69,8 @@ export default class TaskController {
       [id, body.title ?? null, body.description ?? null, body.status ?? null]
     );
     const task: Task = result.rows[0];
-    await tasksQueue.add('process-task', task, {
-      removeOnComplete: true,
-      removeOnFail: false,
-    });
+    await tasksQueue.add('update-task', task, { removeOnComplete: true, removeOnFail: false });
+
     if (result.rows.length === 0) {
       throw new HttpError(404, 'Task not found');
     }
