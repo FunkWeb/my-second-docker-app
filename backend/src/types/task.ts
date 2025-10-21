@@ -2,7 +2,7 @@ export type Task = {
     id: bigint;
     title: string;
     description?: string;
-    status: 'pending' | 'in-progress' | 'completed';
+    status: 'todo' | 'in-progress' | 'done';
 
     due_at?: Date;
     completed_at?: Date;

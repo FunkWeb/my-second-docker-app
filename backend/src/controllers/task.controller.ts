@@ -45,7 +45,7 @@ export class TaskController {
       `INSERT INTO tasks (title, description, status)
        VALUES ($1, $2, $3)
        RETURNING *`,
-      [title, description || '', 'pending']
+      [title, description || '', 'todo']
     );
 
     return {
