@@ -1,16 +1,30 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
+    "rootDir": "../",
+    "outDir": "./dist",
     "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "baseUrl": "../",
+    "paths": {
+      "@shared/*": ["shared/*"],
+      "@backend/*": ["backend/src/*"]
+    }
   },
   "include": [
-    "src"
+    "src/**/*",
+    "../shared/**/*",
+    "../backend/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }
