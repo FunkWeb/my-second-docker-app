@@ -7,6 +7,7 @@ import {useExpressServer} from 'routing-controllers';
 import {errorHandler} from './middlewares/error.handler.js';
 import {HealthController} from './controllers/health.controller.js';
 import {PingController} from "./controllers/ping.controller.js";
+import {TaskController} from "./controllers/task.controller.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ useExpressServer(app, {
   controllers: [ // TODO: add more controllers
     HealthController,
     PingController,
+    TaskController,
   ],
   validation: true,
   classTransformer: true,
