@@ -1,7 +1,7 @@
 // workers/tasks.worker.ts
 import { Worker } from 'bullmq';
-import {postgres} from "./postgres.js";
-import {redis} from "./redis.js";
+import {postgres} from "../postgres.js";
+import {redis} from "../redis.js";
 
 
 const worker = new Worker(

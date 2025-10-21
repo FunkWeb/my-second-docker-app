@@ -1,4 +1,3 @@
-// shared/types/task.ts
 export type TaskStatus =
   | 'queued'
   | 'ready'

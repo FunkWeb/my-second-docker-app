@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 
 useExpressServer(app, {
   routePrefix: '/api/v1',
-  controllers: [ // TODO: add more controllers
+  controllers: [
     HealthController,
     PingController,
     taskController

@@ -1,8 +1,8 @@
 import { Controller, Post, Body, Get, Param, HttpError, Delete, Put } from 'routing-controllers';
-import { Task } from '../types/task.js';
 import crypto from 'crypto';
 import {tasksQueue} from "../queues/tasks.queue.js";
 import {postgres} from "../postgres.js";
+import { Task } from '../types/task.js';
 
 @Controller('/tasks')
 export default class TaskController {
