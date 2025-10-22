@@ -1,18 +1,18 @@
 import { Job } from 'bullmq';
-import {Task} from "../types/task.type";
+import { TaskRepository } from '../repository/task.repository.js';
+import {TaskJobData} from "../types/task.type";
 
-export default async function taskJob(job: Job<Task>) {
-  console.log(`[taskJob] Processing task: ${job.data.title}`);
+const repo = new TaskRepository();
 
-  const { id, title, description } = job.data;
-  const result = {
-    message: `Task "${title}" completed successfully`,
-    taskId: id,
-    processedAt: new Date().toISOString(),
-    description: description || null,
-  };
-
-  console.log(`[taskJob] Finished: ${title}`);
-
-  return result;
+export default async function taskJob(job: Job<TaskJobData>) {
+  switch (job.name) {
+    case 'create':
+      return repo.createTask(job.data.body);
+    case 'update':
+      return repo.update(job.data.id!, job.data.body);
+    case 'delete':
+      return repo.delete(job.data.id!);
+    default:
+      console.log('Unknown job type', job.name);
+  }
 }

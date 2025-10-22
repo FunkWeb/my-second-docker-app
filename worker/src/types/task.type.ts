@@ -1,24 +1,18 @@
-export type TaskStatus =
-  | 'queued'
-  | 'ready'
-  | 'active'
-  | 'completed'
-  | 'failed';
+export interface CreateTaskDTO {
+  title: string;
+  description?: string;
+}
 
 export interface Task {
   id: string;
-
   title: string;
-
   description?: string;
-
-  status: TaskStatus;
-
+  status: string;
   createdAt: string;
-  readyAt?: string;
-  startedAt?: string;
-  completedAt?: string;
-  failedAt?: string;
-  result?: unknown;
-  error?: string;
+}
+
+export interface TaskJobData {
+  type: 'create' | 'update' | 'delete';
+  id?: string;
+  body?: CreateTaskDTO;
 }
