@@ -1,15 +1,16 @@
 // workers/tasks.worker.ts
-import { Worker } from 'bullmq';
+import {Job, Worker} from 'bullmq';
 import {postgres} from "../postgres.js";
 import {redis} from "../redis.js";
+import {CreateTaskJobData, DeleteTaskJobData, UpdateTaskJobData} from "../types/task.js";
 
 
 const worker = new Worker(
   'tasks',
-  async (job) => {
+  async (job: Job) => {
     switch (job.name) {
       case 'create-task': {
-        const { task } = job.data;
+        const data = job.data as CreateTaskJobData;
         await postgres.query(
           'INSERT INTO tasks (id, title, description, status, created_at) VALUES ($1, $2, $3, $4, $5)',
           [task.id, task.title, task.description, 'processed', task.createdAt]
@@ -17,7 +18,7 @@ const worker = new Worker(
         break;
       }
       case 'update-task': {
-        const { id, body } = job.data;
+        const data = job.data as UpdateTaskJobData;
         await postgres.query(
           `UPDATE tasks
            SET title = COALESCE($2, title),
@@ -29,8 +30,8 @@ const worker = new Worker(
         break;
       }
       case 'delete-task': {
-        const { id } = job.data;
-        await postgres.query('DELETE FROM tasks WHERE id = $1', [id]);
+        const data = job.data as DeleteTaskJobData;
+        await postgres.query('DELETE FROM tasks WHERE id = $1', [data.id]);
         break;
       }
       default:
