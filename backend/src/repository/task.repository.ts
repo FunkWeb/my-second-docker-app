@@ -1,4 +1,12 @@
-import {createtaskDTO, TaskResponseDTO, UpdateTaskDTO, Task, TaskListItemDTO} from "../types/task.js";
+import {
+  createtaskDTO,
+  TaskResponseDTO,
+  UpdateTaskDTO,
+  Task,
+  TaskListItemDTO,
+  UpdateTaskJob,
+  UpdateTaskJobData
+} from "../types/task.js";
 import {postgres} from "../postgres.js";
 import {tasksQueue} from "../queues/tasks.queue.js";
 import crypto from "crypto";
@@ -35,21 +43,40 @@ export class TaskRepository {
            status = COALESCE($4, status)
        WHERE id = $1
          RETURNING
-         id,
-         title,
-         description,
-         status,
-         created_at as "createdAt",
-         ready_at as "readyAt",
-         started_at as "startedAt",
-         completed_at as "completedAt",
-         failed_at as "failedAt",
-         result,
-         error`,
+       id,
+       title,
+       description,
+       status,
+       created_at as "createdAt",
+       ready_at as "readyAt",
+       started_at as "startedAt",
+       completed_at as "completedAt",
+       failed_at as "failedAt",
+       result,
+       error`,
       [id, updates.title ?? null, updates.description ?? null, updates.status ?? null]
     );
-    return result.rows[0] ?? null;
+
+    const task = result.rows[0];
+    if (!task) return null;
+
+    const updateJobPayload: UpdateTaskJobData = {
+      id,
+      body: {
+        title: updates.title,
+        description: updates.description,
+        status: updates.status,
+      }
+    };
+
+    await tasksQueue.add('update-task', updateJobPayload, {
+      removeOnComplete: true,
+      removeOnFail: false
+    });
+
+    return task;
   }
+
 
   async delete(id: string): Promise<void> {
     const result = await postgres.query<Task>(

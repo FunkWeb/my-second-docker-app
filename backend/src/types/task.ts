@@ -60,9 +60,13 @@ export interface CreateTaskJobData {
 
 export interface UpdateTaskJobData {
   id: string;
-  body: UpdateTaskDTO;
+  body: UpdateTaskJob;
 }
-
+export interface UpdateTaskJob {
+ title?: string;
+ description?: string;
+ status?: TaskStatus;
+}
 export interface DeleteTaskJobData {
   id: string;
 }

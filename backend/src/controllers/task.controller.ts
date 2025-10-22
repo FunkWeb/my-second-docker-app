@@ -48,10 +48,7 @@ export default class TaskController {
       throw new HttpError(404, 'Task not found');
     }
 
-    await tasksQueue.add('update-task', task, {
-      removeOnComplete: true,
-      removeOnFail: false
-    });
+
 
     return task;
   }
