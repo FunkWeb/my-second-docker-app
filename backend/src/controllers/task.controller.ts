@@ -30,7 +30,10 @@ export default class TaskController {
 
   @Delete('/:id')
   async deleteTask(@Param('id') id: string): Promise<{ message: string }> {
-    await this.repo.delete(id);
+ const deleted= await this.repo.delete(id);
+ if (!deleted) {
+      throw new HttpError(404, 'Task not found');
+    }
     return { message: 'Task deleted successfully' };
   }
 

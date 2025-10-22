@@ -1,9 +1,10 @@
 // workers/tasks.worker.ts
-import {Job, Worker} from 'bullmq';
-import {postgres} from "../postgres.js";
-import {redis} from "../redis.js";
-import {CreateTaskJobData, DeleteTaskJobData, UpdateTaskJobData} from "../types/task.js";
+import { Job, Worker } from 'bullmq';
+import { redis } from '../redis.js';
+import { CreateTaskJobData, DeleteTaskJobData, UpdateTaskJobData } from '../types/task.js';
+import {TaskRepository} from "../repository/task.repository.js";
 
+const repository = new TaskRepository();
 
 const worker = new Worker(
   'tasks',
@@ -11,31 +12,24 @@ const worker = new Worker(
     switch (job.name) {
       case 'create-task': {
         const data = job.data as CreateTaskJobData;
-        await postgres.query(
-          'INSERT INTO tasks (id, title, description, status, created_at) VALUES ($1, $2, $3, $4, $5)',
-          [task.id, task.title, task.description, 'processed', task.createdAt]
-        );
+        await repository.createTask({
+          title: data.task.title,
+          description: data.task.description,
+        });
         break;
       }
       case 'update-task': {
         const data = job.data as UpdateTaskJobData;
-        await postgres.query(
-          `UPDATE tasks
-           SET title = COALESCE($2, title),
-               description = COALESCE($3, description),
-               status = COALESCE($4, status)
-           WHERE id = $1`,
-          [id, body.title ?? null, body.description ?? null, body.status ?? null]
-        );
+        await repository.update(data.id, data.body);
         break;
       }
       case 'delete-task': {
         const data = job.data as DeleteTaskJobData;
-        await postgres.query('DELETE FROM tasks WHERE id = $1', [data.id]);
+        await repository.delete(data.id);
         break;
       }
       default:
-        console.log('Unknown job type', job.name);
+        console.log('Unknown job type:', job.name);
     }
   },
   { connection: redis }
