@@ -1,25 +1,25 @@
-// shared/types/task.ts
-export type TaskStatus =
-  | 'queued'
-  | 'ready'
-  | 'active'
-  | 'completed'
-  | 'failed';
-
+// types/task.ts
 export interface Task {
   id: string;
-
   title: string;
-
   description?: string;
-
-  status: TaskStatus;
-
+  status: 'queued' | 'active' | 'completed' | 'failed';
   createdAt: string;
-  readyAt?: string;
+  updatedAt?: string;
   startedAt?: string;
   completedAt?: string;
   failedAt?: string;
-  result?: unknown;
+  result?: any;
   error?: string;
 }
+
+export interface CreateTaskDTO {
+  title: string;
+  description?: string;
+}
+
+// Job data sent to the queue
+export type TaskJobData =
+  | { type: 'create'; body: CreateTaskDTO }
+  | { type: 'update'; id: string; body: Partial<CreateTaskDTO> }
+  | { type: 'delete'; id: string };

@@ -1,80 +1,47 @@
-import { Controller, Post, Body, Get, Param, HttpError, Delete, Put } from 'routing-controllers';
-import crypto from 'crypto';
-import {tasksQueue} from "../queues/tasks.queue.js";
-import {postgres} from "../postgres.js";
-import { Task } from '../types/task.js';
+import { Controller, Post, Body, Put, Delete, Param, Get } from 'routing-controllers';
+import { tasksQueue } from '../queues/tasks.queue.js';
+import { CreateTaskDTO, TaskJobData } from '../types/task.js';
+import { postgres } from "../postgres.js";
 
 @Controller('/tasks')
 export default class TaskController {
+
   @Post('/')
-  async createTask(@Body() body: { title: string; description: string }) {
-    const task: Task = {
-      id: crypto.randomUUID(),
-      title: body.title,
-      description: body.description,
-      status: 'queued',
-      createdAt: new Date().toISOString(),
-    };
-    await postgres.query(
-      'INSERT INTO tasks (id, title, description, status, created_at) VALUES ($1, $2, $3, $4, $5)',
-      [task.id, task.title, task.description, task.status, task.createdAt]
-    );
-    await tasksQueue.add('create-task', task, { removeOnComplete: true, removeOnFail: false });
+  async createTask(@Body() body: CreateTaskDTO) {
+    const jobData: TaskJobData = { type: 'create', body };
+    console.log('[Controller] Queueing job:', jobData);
+     const job = await tasksQueue.add('create', jobData);
+     return { message: 'Task creation has been queued', jobId: job.id };
+  }
 
+  @Put('/:id')
+  async updateTask(@Param('id') id: string, @Body() body: Partial<CreateTaskDTO>) {
+    const jobData: TaskJobData = { type: 'update', id, body };
+    console.log('[Controller] Queueing update job:', jobData);
+    const job = await tasksQueue.add('update', jobData);
+    return { message: 'Task creation has been queued', jobId: job.id };
+  }
 
-    return task;
+  @Delete('/:id')
+  async deleteTask(@Param('id') id: string) {
+    const jobData: TaskJobData = { type: 'delete', id };
+    console.log('[Controller] Queueing delete job:', jobData);
+    const job = await tasksQueue.add('delete', jobData);
+    return { message: 'Task creation has been queued', jobId: job.id };
   }
 
   @Get('/')
   async getAllTasks() {
-    const result = await postgres.query('SELECT * FROM tasks ORDER BY created_at DESC');
+    console.log('[Controller] Fetching all tasks from DB...');
+    const result = await postgres.query('SELECT id, title, status, created_at FROM tasks ORDER BY created_at DESC');
+    console.log('[Controller] DB result:', result.rows);
     return result.rows;
   }
-
-  @Get('/:id')
-  async getTask(@Param('id') id: string) {
-    const result = await postgres.query('SELECT * FROM tasks WHERE id = $1', [id]);
-
-    if (result.rows.length === 0) {
-      throw new HttpError(404, 'Task not found');
-    }
-
+ @Get('/:id')
+  async getTaskById(@Param('id') id: string) {
+    console.log(`[Controller] Fetching task with id ${id} from DB...`);
+    const result = await postgres.query('SELECT id, title, status, created_at FROM tasks WHERE id = $1', [id]);
+    console.log('[Controller] DB result:', result.rows[0]);
     return result.rows[0];
-  }
-
-
-  @Delete('/:id')
-  async deleteTask(@Param('id') id: string) {
-    const result = await postgres.query('DELETE FROM tasks WHERE id = $1 RETURNING *', [id]);
-    if (result.rows.length === 0) {
-      throw new HttpError(404, 'Task not found');
-    }
-    const task: Task = result.rows[0];
-    await tasksQueue.add('delete-task', task, { removeOnComplete: true, removeOnFail: false });
-
-    return result.rows[0];
-  }
-
-  @Put('/:id')
-  async updateTask(
-    @Param('id') id: string,
-    @Body() body: Partial<{ title: string; description: string; status: string }>
-  ) {
-    const result = await postgres.query(
-      `UPDATE tasks
-       SET title       = COALESCE($2, title),
-           description = COALESCE($3, description),
-           status      = COALESCE($4, status)
-       WHERE id = $1 RETURNING *`,
-      [id, body.title ?? null, body.description ?? null, body.status ?? null]
-    );
-    const task: Task = result.rows[0];
-    await tasksQueue.add('update-task', task, { removeOnComplete: true, removeOnFail: false });
-
-    if (result.rows.length === 0) {
-      throw new HttpError(404, 'Task not found');
-    }
-    return result.rows[0];
-
   }
 }

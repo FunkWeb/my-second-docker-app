@@ -1,44 +1,43 @@
-// workers/tasks.worker.ts
-import { Worker } from 'bullmq';
-import {postgres} from "../postgres.js";
-import {redis} from "../redis.js";
+import { Worker, Job } from 'bullmq';
+import { redis } from '../redis.js';
+import { TaskRepository } from '../../../worker/src/repository/task.repository.js';
+import {Task} from "../types/task.js";
 
+const repository = new TaskRepository();
 
-const worker = new Worker(
-  'tasks',
-  async (job) => {
-    switch (job.name) {
-      case 'create-task': {
-        const { task } = job.data;
-        await postgres.query(
-          'INSERT INTO tasks (id, title, description, status, created_at) VALUES ($1, $2, $3, $4, $5)',
-          [task.id, task.title, task.description, 'processed', task.createdAt]
-        );
-        break;
-      }
-      case 'update-task': {
-        const { id, body } = job.data;
-        await postgres.query(
-          `UPDATE tasks
-           SET title = COALESCE($2, title),
-               description = COALESCE($3, description),
-               status = COALESCE($4, status)
-           WHERE id = $1`,
-          [id, body.title ?? null, body.description ?? null, body.status ?? null]
-        );
-        break;
-      }
-      case 'delete-task': {
-        const { id } = job.data;
-        await postgres.query('DELETE FROM tasks WHERE id = $1', [id]);
-        break;
-      }
-      default:
-        console.log('Unknown job type', job.name);
-    }
-  },
-  { connection: redis }
-);
+export default function listenToBackendTasks() {
+  const worker = new Worker<Task>(
+    'tasks',
+    async (job: Job<Task>) => {
+      const task = job.data;
 
-worker.on('completed', (job) => console.log(`Job ${job.id} completed`));
-worker.on('failed', (job, err) => console.error(`Job ${job?.id} failed: ${err.message}`));
+      switch (job.name) {
+        case 'create-task':
+          console.log('[taskJob] Processing task:', task.title);
+          await repository.createTask(task);
+          console.log('[taskJob] Finished:', task.title);
+          break;
+
+        case 'update-task':
+          console.log('[taskJob] Updating task:', task.id);
+          await repository.update(task.id, task);
+          break;
+
+        case 'delete-task':
+          console.log('[taskJob] Deleting task:', task.id);
+          await repository.delete(task.id);
+          break;
+
+        default:
+          console.log('Unknown job type:', job.name);
+      }
+    },
+    { connection: redis }
+  );
+
+  worker.on('ready', () => console.log('[tasks] Worker ready'));
+  worker.on('completed', (job) => console.log(`Job ${job.id} completed`));
+  worker.on('failed', (job, err) => console.error(`Job ${job?.id} failed: ${err.message}`));
+
+  return worker;
+}
