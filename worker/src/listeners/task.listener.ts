@@ -1,25 +1,41 @@
 import { Worker, Job } from 'bullmq';
 import { redis } from '../redis.js';
-import taskJob from '../jobs/task.job.js';
-import {Task} from "../types/task.type";
+import { TaskRepository } from '../repository/task.repository.js';
+import {TaskJobData} from "../types/task.type";
 
 export default function listenToTasks() {
-  const worker = new Worker<Task>('tasks', taskJob, { connection: redis });
+  const repository = new TaskRepository();
 
-  worker.on('ready', () => console.log(`[tasks] Worker ready`));
+  const worker = new Worker<TaskJobData>(
+    'tasks',
+    async (job: Job<TaskJobData>) => {
+      console.log(`[Listener] Received job ${job.id}:`, job.name, job.data);
 
-  worker.on('active', async (job: Job<Task>) => {
-    await job.updateData({ ...job.data, status: 'active', startedAt: new Date().toISOString() });
-  });
+      switch (job.name) {
+        case 'create':
+          console.log('[Listener] Processing create-task...');
+          const task = await repository.createTask(job.data.body!);
+          console.log('[Listener] Task created:', task);
+          break;
+        case 'update':
+          console.log('[Listener] Processing update-task...');
+          const updated = await repository.update(job.data.id!, job.data.body!);
+          console.log('[Listener] Task updated:', updated);
+          break;
+        case 'delete':
+          console.log('[Listener] Processing delete-task...');
+          const deleted = await repository.delete(job.data.id!);
+          console.log('[Listener] Task deleted:', deleted);
+          break;
+        default:
+          console.warn('[Listener] Unknown job type:', job.name);
+      }
+    },
+    { connection: redis }
+  );
 
-  worker.on('completed', async (job: Job<Task>, result) => {
-    await job.updateData({ ...job.data, status: 'completed', completedAt: new Date().toISOString(), result });
-  });
-
-  worker.on('failed', async (job: Job<Task> | undefined, err: Error) => {
-    if (!job) return;
-    await job.updateData({ ...job.data, status: 'failed', failedAt: new Date().toISOString(), error: err.message });
-  });
+  worker.on('completed', (job) => console.log(`[Listener] Job ${job.id} completed`));
+  worker.on('failed', (job, err) => console.error(`[Listener] Job ${job?.id} failed:`, err));
 
   return worker;
 }
