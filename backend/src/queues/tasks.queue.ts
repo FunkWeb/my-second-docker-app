@@ -11,7 +11,7 @@ export interface CreateTaskJob {
   data: {
     title: string;
     description?: string;
-    status?: 'pending' | 'in_progress' | 'completed';
+    status?: 'todo' | 'in_progress' | 'done';  // Changed from 'pending' | 'in_progress' | 'completed'
   };
 }
 
@@ -21,7 +21,7 @@ export interface UpdateTaskJob {
     id: number;
     title?: string;
     description?: string;
-    status?: 'pending' | 'in_progress' | 'completed';
+    status?: 'todo' | 'in_progress' | 'done';  // Changed from 'pending' | 'in_progress' | 'completed'
   };
 }
 

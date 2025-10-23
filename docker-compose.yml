@@ -31,18 +31,53 @@ services:
       timeout: 3s
       retries: 10
 
-  worker:
-    depends_on: [ pgsql, valkey ]
+  backend:
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
     restart: unless-stopped
     build:
-      context: ./worker
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - "3000:3000"
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://pguser:notsecurepassword@pgsql:5432/pgdb
       REDIS_URL: redis://valkey:6379
+      PORT: 3000
     healthcheck:
-      test: [ "CMD", "node", "dist/healthcheck.js" ]
-      interval: 5s
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health" ]
+      interval: 10s
       timeout: 3s
-      retries: 10
+      retries: 3
+
+  worker:
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    restart: unless-stopped
+    build:
+      context: .  # Use project root to access shared folder
+      dockerfile: worker/Dockerfile
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://pguser:notsecurepassword@pgsql:5432/pgdb
+      REDIS_URL: redis://valkey:6379
+
+  frontend:
+    depends_on:
+      - backend
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: prod
+    ports:
+      - "8080:80"
+    environment:
+      VITE_API_URL: http://localhost:3000

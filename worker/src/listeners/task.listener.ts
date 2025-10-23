@@ -1,6 +1,7 @@
-import {Worker, type Job} from 'bullmq';
-import {redis} from '../redis';
-import taskJob from '../jobs/task.job';
+// worker/src/listeners/task.listener.ts
+import { Worker, type Job } from 'bullmq';
+import { redis } from '../redis.js';  // ← Added .js extension
+import taskJob from '../jobs/task.job.js';  // ← Added .js extension
 
 const QUEUE_NAME = 'tasks';
 
@@ -10,23 +11,23 @@ export default async function listenToTasks() {
   });
 
   worker.on('ready', () => {
-    // TODO: on task ready
+    console.log('✅ Task worker ready');
   });
 
   worker.on('active', (job: Job) => {
-    // TODO: on task active
+    console.log(`🔄 Processing job ${job.id}`);
   });
 
   worker.on('completed', (job: Job, result: unknown) => {
-    // TODO: on task completed
+    console.log(`✅ Job ${job.id} completed successfully`);
   });
 
   worker.on('failed', (job: Job | undefined, err: Error) => {
-    // TODO: on task failed
+    console.error(`❌ Job ${job?.id} failed:`, err.message);
   });
 
   worker.on('error', (err: Error) => {
-    // TODO: on task error
+    console.error('❌ Worker error:', err);
   });
 
   return worker;
