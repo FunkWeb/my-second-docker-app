@@ -1,12 +1,14 @@
-// worker/src/jobs/task.job.ts uwu
-import type { Job } from 'bullmq';
+// worker/src/workers/task.worker.ts
+
+import { Worker, Job } from 'bullmq';
+import { redis } from '../redis.js';
 import { postgres } from '../postgres.js';
 import { createTaskQueries } from '../../../shared/db/task.queries.js';
 import type { TaskJob } from '../../../backend/src/queues/tasks.queue.js';
 
 const taskQueries = createTaskQueries(postgres);
 
-export default async function taskJob(job: Job<TaskJob>) {
+async function processTaskJob(job: Job<TaskJob>) {
   console.log(`Processing task job ${job.id} of type: ${job.data.type}`);
 
   try {
@@ -18,7 +20,7 @@ export default async function taskJob(job: Job<TaskJob>) {
       }
 
       case 'update': {
-        const { id, ...updateData } = job.data.data;6
+        const { id, ...updateData } = job.data.data;
         const task = await taskQueries.updateTask(id, updateData);
 
         if (!task) {
@@ -51,3 +53,22 @@ export default async function taskJob(job: Job<TaskJob>) {
     throw error;
   }
 }
+
+export const taskWorker = new Worker('tasks', processTaskJob, {
+  connection: redis,
+  concurrency: 5,
+});
+
+taskWorker.on('completed', (job) => {
+  console.log(`Job ${job.id} completed successfully`);
+});
+
+taskWorker.on('failed', (job, err) => {
+  console.error(`Job ${job?.id} failed:`, err.message);
+});
+
+taskWorker.on('error', (err) => {
+  console.error('Worker error:', err);
+});
+
+console.log('✅ Task worker started and listening for jobs...');

@@ -1,5 +1,6 @@
-import listenToPing from './listeners/ping.listener';
-import listenToTasks from './listeners/task.listener';
+// worker/src/index.ts
+import listenToPing from './listeners/ping.listener.js';  // ← Added .js
+import listenToTasks from './listeners/task.listener.js';  // ← Added .js
 
 async function main() {
   const pingListener = await listenToPing();
@@ -12,7 +13,7 @@ async function main() {
     process.exit(0);
   });
 
-  console.log('Worker is running and listening to queues...');
+  console.log('✅ Worker is running and listening to queues...');
 }
 
 void main();
