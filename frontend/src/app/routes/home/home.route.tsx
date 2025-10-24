@@ -17,7 +17,7 @@ export default function Home() {
       <section>
         <h3>Questions</h3>
         <p>When you refresh the page, or navigate between pages, the Interactive Button count resets. Why?</p>
-        <p>When you refresh the page, or navigate between pages, the useAuth context stays the same. Why?</p>
+        <p>When you navigate between pages, the useAuth context stays the same. Why?</p>
       </section>
       <section>
         <h3>Interactive Button</h3>
