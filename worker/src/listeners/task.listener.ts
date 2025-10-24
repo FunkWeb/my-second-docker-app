@@ -1,33 +1,16 @@
-import {Worker, type Job} from 'bullmq';
-import {redis} from '../redis';
-import taskJob from '../jobs/task.job';
+import { Worker, Job } from 'bullmq';
+import { redis } from '../redis.js';
+import {TaskJobData} from "../types/task.type";
+import taskJob from "../jobs/task.job";
 
-const QUEUE_NAME = 'tasks';
-
-export default async function listenToTasks() {
-  const worker = new Worker(QUEUE_NAME, taskJob, {
-    connection: redis,
-  });
-
-  worker.on('ready', () => {
-    // TODO: on task ready
-  });
-
-  worker.on('active', (job: Job) => {
-    // TODO: on task active
-  });
-
-  worker.on('completed', (job: Job, result: unknown) => {
-    // TODO: on task completed
-  });
-
-  worker.on('failed', (job: Job | undefined, err: Error) => {
-    // TODO: on task failed
-  });
-
-  worker.on('error', (err: Error) => {
-    // TODO: on task error
-  });
+export default function listenToTasks() {
+  const worker = new Worker<TaskJobData>(
+    'tasks',
+    taskJob,
+    { connection: redis }
+  );
+  worker.on('completed', (job) => console.log(`[Listener] Job ${job.id} completed`));
+  worker.on('failed', (job, err) => console.error(`[Listener] Job ${job?.id} failed:`, err));
 
   return worker;
 }

@@ -1,18 +1,14 @@
-import listenToPing from './listeners/ping.listener';
-import listenToTasks from './listeners/task.listener';
+import listenToTasks from './listeners/task.listener.js';
 
 async function main() {
-  const pingListener = await listenToPing();
-  const taskListener = await listenToTasks();
+  const taskListener = listenToTasks();
 
   process.on('SIGTERM', async () => {
-    await pingListener.close();
     await taskListener.close();
-
     process.exit(0);
   });
 
-  console.log('Worker is running and listening to queues...');
+  console.log('Worker running...');
 }
 
 void main();
