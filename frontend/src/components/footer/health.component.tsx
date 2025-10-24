@@ -4,6 +4,7 @@ import {Button} from "../button/button.component.tsx";
 export function Health() {
   const {health, refresh, loading, error} = useHealth();
 
+  // TODO: should we return "checking health..." or not (?)
   if (loading) return <p>Checking health...</p>;
   if (error) return <p>Error: {error}</p>;
 
