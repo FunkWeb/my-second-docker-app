@@ -1,7 +1,7 @@
 import {Job, Worker} from 'bullmq';
 import { TaskRepository } from '../repository/task.repository.js';
-import {TaskJobData} from "../types/task.type";
 import {redis} from "../redis";
+import {TaskJobData} from "../../types/task.type";
 
 const repository = new TaskRepository();
 export default async function taskJob() {

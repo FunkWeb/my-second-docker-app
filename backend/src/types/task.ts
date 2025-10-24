@@ -1,11 +1,9 @@
 
-
-export interface CreateTaskDTO {
+export interface TaskDTO {
   title: string;
   description?: string;
 }
-
 export type TaskJobData =
-  | { type: 'create'; body: CreateTaskDTO }
-  | { type: 'update'; id: string; body: Partial<CreateTaskDTO> }
+  | { type: 'create'; body: TaskDTO }
+  | { type: 'update'; id: string; body: Partial<TaskDTO> }
   | { type: 'delete'; id: string };

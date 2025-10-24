@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Put, Delete, Param, Get } from 'routing-controllers';
 import { tasksQueue } from '../queues/tasks.queue.js';
 import { postgres } from "../postgres.js";
-import {TaskDTO, TaskJobData} from "@shared/types.js";
+import {TaskDTO, TaskJobData} from "../types/task.js";
 
 @Controller('/tasks')
 export default class TaskController {
