@@ -19,7 +19,7 @@ export default class TaskController {
     const jobData: TaskJobData = { type: 'update', id, body };
     console.log('[Controller] Queueing update job:', jobData);
     const job = await tasksQueue.add('update', jobData);
-    return { message: 'Task creation has been queued', jobId: job.id };
+    return { message: 'Task update has been queued', jobId: job.id };
   }
 
   @Delete('/:id')
@@ -27,7 +27,7 @@ export default class TaskController {
     const jobData: TaskJobData = { type: 'delete', id };
     console.log('[Controller] Queueing delete job:', jobData);
     const job = await tasksQueue.add('delete', jobData);
-    return { message: 'Task creation has been queued', jobId: job.id };
+    return { message: 'Task deletion has been queued', jobId: job.id };
   }
 
   @Get('/')
