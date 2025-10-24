@@ -1,4 +1,10 @@
 .footer-component {
     background: #333333;
     padding: 20px 0;
+
+    .footer-component-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
