@@ -11,6 +11,16 @@ export default function Home() {
         <p>This is the home page of the application.</p>
       </section>
       <section>
+        <h3>Information</h3>
+        <p>This is built as a Single Page Application (SPA). What's that?</p>
+      </section>
+      <section>
+        <h3>Questions</h3>
+        <p>When you refresh the page, or navigate between pages, the Interactive Button count resets. Why?</p>
+        <p>When you refresh the page, or navigate between pages, the useAuth context stays the same. Why?</p>
+      </section>
+      <section>
+        <h3>Interactive Button</h3>
         <Button onClick={() => setCount(++count)}>Click me!</Button>
         <p>Button clicked {count} times.</p>
       </section>

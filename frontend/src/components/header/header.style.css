@@ -1,4 +1,19 @@
 .header-component {
     background: #333333;
     padding: 20px 0;
+
+    .header-component-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .header-component-item {
+            display: inline-block;
+
+            .button-component {
+                font-size: 12px;
+                padding: 12px 24px;
+            }
+        }
+    }
 }

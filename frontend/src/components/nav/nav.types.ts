@@ -1,4 +1,6 @@
-export type NavProps = {
+import type {ComponentPropsWithoutRef} from "react";
+
+export type NavProps = ComponentPropsWithoutRef<"nav"> & {
   items: NavItem[];
 }
 
