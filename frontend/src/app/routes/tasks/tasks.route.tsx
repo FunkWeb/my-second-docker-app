@@ -1,4 +1,7 @@
 export default function Home() {
+  // TODO: implement tasks page
+  // TODO: use TasksProvider... how?
+
   return (
     <div className={"container"}>
       <h2>Tasks Page</h2>
