@@ -21,17 +21,13 @@
     "routing-controllers": "^0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.38.0",
+
     "@types/cors": "^2",
     "@types/express": "^5",
     "@types/morgan": "^1",
-    "@types/multer": "^2",
-    "@types/node": "^24",
+
+
     "@types/pg": "^8",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
-    "eslint": "^9.38.0",
     "tsx": "^4",
     "typescript": "^5"
   }
