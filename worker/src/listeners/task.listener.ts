@@ -1,7 +1,8 @@
 import { Worker, Job } from 'bullmq';
 import { redis } from '../redis.js';
 import { TaskRepository } from '../repository/task.repository.js';
-import {TaskJobData} from "../types/task.type";
+import {TaskJobData} from "../../../shared/types";
+
 
 export default function listenToTasks() {
   const repository = new TaskRepository();
@@ -11,12 +12,13 @@ export default function listenToTasks() {
     async (job: Job<TaskJobData>) => {
       console.log(`[Listener] Received job ${job.id}:`, job.name, job.data);
 
-      switch (job.name) {
-        case 'create':
-          console.log('[Listener] Processing create-task...');
-          const task = await repository.createTask(job.data.body!);
-          console.log('[Listener] Task created:', task);
+      switch (job.data.type) {
+        case 'create': {
+          console.log('[Worker] Processing create...');
+          const task = await repository.createTask(job.data.body);
+          console.log('[Worker] Created task:', task);
           break;
+        }
         case 'update':
           console.log('[Listener] Processing update-task...');
           const updated = await repository.update(job.data.id!, job.data.body!);

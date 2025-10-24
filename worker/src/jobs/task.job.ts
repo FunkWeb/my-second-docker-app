@@ -1,11 +1,11 @@
 import { Job } from 'bullmq';
 import { TaskRepository } from '../repository/task.repository.js';
-import {TaskJobData} from "../types/task.type";
+import {TaskJobData} from "../../../shared/types";
 
 const repo = new TaskRepository();
 
 export default async function taskJob(job: Job<TaskJobData>) {
-  switch (job.name) {
+  switch (job.data.type) {
     case 'create':
       return repo.createTask(job.data.body);
     case 'update':
