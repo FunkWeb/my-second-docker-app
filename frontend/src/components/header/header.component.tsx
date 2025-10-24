@@ -1,5 +1,5 @@
 import type {HeaderProps} from "./header.types.ts";
-import {useAuth} from "../../app/providers/auth/auth.context.tsx";
+import {useAuth} from "../../providers/auth/auth.context.tsx";
 import {Nav} from "../nav/nav.component.tsx";
 import "./header.style.css"
 import {Button} from "../button/button.component.tsx";

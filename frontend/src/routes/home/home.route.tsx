@@ -1,4 +1,4 @@
-import {Button} from "../../../components/button/button.component.tsx";
+import {Button} from "../../components/button/button.component.tsx";
 import {useState} from "react";
 
 export default function Home() {

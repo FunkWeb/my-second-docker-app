@@ -1,4 +1,4 @@
-import {useHealth} from "../../app/providers/health/health.context.tsx";
+import {useHealth} from "../../providers/health/health.context.tsx";
 import {Button} from "../button/button.component.tsx";
 
 export function Health() {

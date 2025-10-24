@@ -1,6 +1,6 @@
 import {Outlet} from 'react-router-dom';
-import {Header} from "../../components/header/header.component.tsx";
-import {Footer} from "../../components/footer/footer.component.tsx";
+import {Header} from "../components/header/header.component.tsx";
+import {Footer} from "../components/footer/footer.component.tsx";
 
 const headerNavItems = [
   {label: 'Home', to: '/'},

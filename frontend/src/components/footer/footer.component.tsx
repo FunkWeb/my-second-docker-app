@@ -1,5 +1,5 @@
 import "./footer.style.css"
-import {HealthProvider} from "../../app/providers/health/health.provider.tsx";
+import {HealthProvider} from "../../providers/health/health.provider.tsx";
 import {Health} from "./health.component.tsx";
 
 export function Footer() {
