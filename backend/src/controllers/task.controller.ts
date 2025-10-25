@@ -1,5 +1,5 @@
 import { JsonController, Get, Post, Put, Delete, Param, Body, HttpCode } from 'routing-controllers';
-import { TaskCreateRequest, TaskUpdateRequest, QueueJobPayload } from '../types/task.js';
+import { TaskCreateDTO, TaskUpdateDTO, QueueJobPayload } from '../types/task.js';
 import { fetchAllTasks, fetchTaskById } from '../postgres.js';
 import { addTaskJob } from '../queues/tasks.queue.js';
 
@@ -33,7 +33,7 @@ export class TaskController {
 
     @Post('/task')
     @HttpCode(202)
-    public async createTask(@Body() data: TaskCreateRequest) {
+    public async createTask(@Body() data: TaskCreateDTO) {
         if (!data.title || data.title.length === 0 || data.title.length > 200) {
             throw { httpCode: 400, message: 'Title is required and must be between 1 and 200 characters.' };
         }
@@ -49,7 +49,7 @@ export class TaskController {
 
     @Put('/task/:id')
     @HttpCode(202)
-    public async updateTask(@Param('id') id: number, @Body() data: TaskUpdateRequest) {
+    public async updateTask(@Param('id') id: number, @Body() data: TaskUpdateDTO) {
         if (isNaN(id)) {
             throw { httpCode: 400, message: 'Invalid task ID format.' };
         }

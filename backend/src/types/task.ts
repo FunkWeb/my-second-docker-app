@@ -1,4 +1,3 @@
-// Standard task interface
 export interface Task {
     id: number;
     title: string;
@@ -11,14 +10,14 @@ export interface Task {
 }
 
 // Data for å opprette en ny task
-export interface TaskCreateRequest {
+export interface TaskCreateDTO {
     title: string;
     description?: string;
-    due_at?: string; // Dato/tid som streng
+    due_at?: string;
 }
 
 // Data for å oppdatere en Task
-export interface TaskUpdateRequest {
+export interface TaskUpdateDTO {
     title?: string;
     description?: string | null;
     status?: 'todo' | 'in_progress' | 'done';
@@ -28,7 +27,7 @@ export interface TaskUpdateRequest {
 // Payload som sendes til worker-køen
 export interface QueueJobPayload {
     operation: 'CREATE' | 'UPDATE' | 'DELETE';
-    data: TaskCreateRequest | TaskUpdateRequest | { id: number }; // Dataen som Worker trenger
-    taskId?: number; // Brukes for UPDATE og DELETE
+    data: TaskCreateDTO | TaskUpdateDTO | { id: number };
+    taskId?: number;
 }
 
