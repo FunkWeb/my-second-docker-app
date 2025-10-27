@@ -7,3 +7,4 @@ export const redis = new Redis(REDIS_URL, {
   enableReadyCheck: true,
   lazyConnect: false,
 });
+//ioredis???

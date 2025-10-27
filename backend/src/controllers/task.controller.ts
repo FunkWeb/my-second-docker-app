@@ -1,28 +1,24 @@
 import { JsonController, Get, Post, Put, Delete, Param, Body, HttpCode } from 'routing-controllers';
-import { TaskCreateDTO, TaskUpdateDTO, QueueJobPayload } from '../types/task.js';
-import { fetchAllTasks, fetchTaskById } from '../postgres.js';
-import { addTaskJob } from '../queues/tasks.queue.js';
+import { TaskCreateDTO, TaskUpdateDTO } from '../types/task.js';
+import { TaskRepository } from '../repositories/task.repository.js';
 
+const taskRepository = new TaskRepository();
 
 @JsonController()
 export class TaskController {
 
-
     @Get('/tasks')
     public async getTasks() {
-
-        return fetchAllTasks();
+        return taskRepository.findAll();
     }
-
 
     @Get('/task/:id')
     public async getTaskById(@Param('id') id: number) {
         if (isNaN(id)) {
-
             throw { httpCode: 400, message: 'Invalid task ID format.' };
         }
 
-        const task = await fetchTaskById(id);
+        const task = await taskRepository.findById(id);
 
         if (!task) {
             throw { httpCode: 404, message: `Task with ID ${id} not found.` };
@@ -38,14 +34,14 @@ export class TaskController {
             throw { httpCode: 400, message: 'Title is required and must be between 1 and 200 characters.' };
         }
 
-        const jobPayload: QueueJobPayload = { operation: 'CREATE', data: data };
-        await addTaskJob(jobPayload);
+        await taskRepository.createJob(data);
 
         return {
             message: 'Task creation request accepted and queued for processing.',
-            job: { operation: jobPayload.operation },
+            job: { operation: 'CREATE' },
         };
     }
+
 
     @Put('/task/:id')
     @HttpCode(202)
@@ -57,14 +53,15 @@ export class TaskController {
              throw { httpCode: 400, message: 'No update data provided in the request body.' };
         }
 
-        const jobPayload: QueueJobPayload = { operation: 'UPDATE', taskId: id, data: data };
-        await addTaskJob(jobPayload);
+        await taskRepository.updateJob(id, data);
 
         return {
             message: `Task ID ${id} update request accepted and queued for processing.`,
-            job: { operation: jobPayload.operation, taskId: jobPayload.taskId },
+            job: { operation: 'UPDATE', taskId: id },
         };
     }
+
+
     @Delete('/task/:id')
     @HttpCode(202)
     public async deleteTask(@Param('id') id: number) {
@@ -72,12 +69,11 @@ export class TaskController {
             throw { httpCode: 400, message: 'Invalid task ID format.' };
         }
 
-        const jobPayload: QueueJobPayload = { operation: 'DELETE', taskId: id, data: { id: id } };
-        await addTaskJob(jobPayload);
+        await taskRepository.deleteJob(id);
 
         return {
             message: `Task ID ${id} deletion request accepted and queued for processing.`,
-            job: { operation: jobPayload.operation, taskId: jobPayload.taskId },
+            job: { operation: 'DELETE', taskId: id },
         };
     }
 }

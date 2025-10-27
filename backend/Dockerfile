@@ -13,7 +13,7 @@ RUN npm run build
 
 FROM node:24-alpine AS prod
 ENV NODE_ENV=production
-WORKDIR /app
+WORKDIR /ap
 COPY package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
 RUN npm prune --omit=dev
