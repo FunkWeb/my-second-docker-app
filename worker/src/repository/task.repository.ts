@@ -1,8 +1,8 @@
 import { postgres } from "../postgres.js";
-import {TaskDTO} from "../../../shared/types";
+import {CreateTaskDTO} from "../../types/task.type";
 
 export class TaskRepository {
-  async createTask(data: TaskDTO) {
+  async createTask(data: CreateTaskDTO) {
     const id = crypto.randomUUID();
     console.log('[Repository] Inserting task into DB:', data);
 
@@ -18,7 +18,7 @@ export class TaskRepository {
     return result.rows[0];
   }
 
-  async update(id: string, data: Partial<TaskDTO>) {
+  async update(id: string, data: Partial<CreateTaskDTO>) {
     console.log('[Repository] Updating task:', id, data);
 
     const result = await postgres.query(
