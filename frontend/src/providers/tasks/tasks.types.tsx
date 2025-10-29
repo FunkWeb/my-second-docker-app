@@ -1,1 +1,5 @@
-// TODO: implement tasks types
+export type Task = {
+    id: number;
+    text: string;
+    completed: boolean;
+}
