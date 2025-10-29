@@ -1,6 +1,6 @@
 .header-component {
     background: #333333;
-    padding: 20px 0;
+    padding: 20px 10px;
 
     .header-component-container {
         display: flex;
