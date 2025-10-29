@@ -1,0 +1,18 @@
+.nav-component {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    ul li {
+        display: inline;
+        margin-right: 16px;
+    }
+
+    ul li a {
+        color: #ffff00;
+        text-decoration: none;
+        font-weight: bold;
+    }
+}

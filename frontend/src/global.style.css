@@ -1,0 +1,27 @@
+body {
+    font: 16px Arial, sans-serif;
+    background: #1e1e1e;
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+}
+
+main {
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 40px;
+}
