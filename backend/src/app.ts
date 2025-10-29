@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 useExpressServer(app, {
-  routePrefix: '/api/v1',
+  routePrefix: '/api',
   controllers: [
     HealthController,
     PingController,
