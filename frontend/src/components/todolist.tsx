@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { getalltasks } from "./apicalls.tsx";
-
+import type {TaskDTO} from "../../type.ts";
 const TodoList = () => {
-    const [todoList, setTodoList] = useState<string[]>([]);
+    const [todoList, setTodoList] = useState<TaskDTO[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchTasks() {
             try {
-                const tasks = await getalltasks(); // call your API
-                setTodoList(tasks.map((task: any) => task.title));
+                const tasks = await getalltasks();
+                setTodoList(tasks.map((task: TaskDTO) => task.title));
             } catch (error) {
                 console.error("Failed to fetch tasks:", error);
             } finally {
@@ -26,8 +26,11 @@ const TodoList = () => {
         <div>
             <h2>task List</h2>
             <ul>
-                {todoList.map((item, index) => (
-                    <li key={index}>{item}</li>
+                {todoList.map((task, index) => (
+                    <li key={index}>
+                        <strong>{task.title}</strong>
+                        {task.description && <p>{task.description}</p>}
+                    </li>
                 ))}
             </ul>
         </div>
