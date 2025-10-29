@@ -8,8 +8,8 @@ const TodoList = () => {
     useEffect(() => {
         async function fetchTasks() {
             try {
-                const tasks = await getalltasks();
-                setTodoList(tasks.map((task: TaskDTO) => task.title));
+                const tasks: TaskDTO[] = await getalltasks();
+                setTodoList(tasks);
             } catch (error) {
                 console.error("Failed to fetch tasks:", error);
             } finally {

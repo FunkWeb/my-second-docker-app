@@ -4,12 +4,12 @@ interface DeleteTasksProps {
     id: string;
     ondelete?: () => void;
 }
-const deletetasks = ({ id }: DeleteTasksProps) => {
-
+const deletetasks = ({ id, ondelete }: DeleteTasksProps) => {
     const handleDelete = async (taskId: string) => {
         try {
             await deletetask(taskId);
             console.log(`Task with id ${taskId} deleted successfully.`);
+            if (ondelete) ondelete();
         } catch (error) {
             console.error(`Failed to delete task with id ${taskId}:`, error);
         }
