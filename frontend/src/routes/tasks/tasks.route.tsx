@@ -1,4 +1,5 @@
 import TaskItem from "../../components/task/task.component";
+import { TasksProvider } from "../../providers/tasks/tasks.provider";
 
 const mockTask = {
   id: 1,
@@ -9,6 +10,7 @@ const mockTask = {
 export default function Home() {
   // TODO: implement tasks page
   // TODO: use TasksProvider... how?
+  
 
   const handleToggleTask = (taskId: number) => {
     console.log(`Toggle task ${taskId}`);
@@ -16,7 +18,9 @@ export default function Home() {
 
   return (
     <div className={"container"}>
-      <TaskItem task={mockTask} toggleTask={handleToggleTask} />
+      <TasksProvider>
+        <TaskItem task={mockTask} toggleTask={handleToggleTask} />
+      </TasksProvider>
     </div>
   );
 }
