@@ -1,1 +1,38 @@
-/* TODO: implement task component styles */
+.taskList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.taskItem {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 12px;
+    padding: 8px;
+}
+
+.taskItemCompleted {
+    background-color: #d4ed91;
+}
+
+.bullet {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.taskText {
+    flex: 1;
+}
+
+.task-statsContainer {
+    margin-top: 40px;
+}
+
+.task-statsText {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}

@@ -1,1 +1,5 @@
-// TODO: implement task component types (only used by component)
+export type Task = {
+  id: number;
+  text: string;
+  completed: boolean;
+}
