@@ -8,8 +8,11 @@ interface SearchbytaskProps {
 }
 const searchbytask = ({ query: initialQuery = "", onSearchResults }: SearchbytaskProps) => {
     const [query, setQuery] = useState(initialQuery);
+    const [searching, setSearching] = useState(false);
 
-    const handleSearch = async () => {
+    const handleSearch = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setSearching(true);
         try {
             const results = await gettaskbyid(query);
             console.log(`Searching tasks with query: ${query}`);
@@ -17,6 +20,9 @@ const searchbytask = ({ query: initialQuery = "", onSearchResults }: Searchbytas
 
         } catch (error) {
             console.error(`Failed to search tasks with query ${query}:`, error);
+        }
+        finally {
+            setSearching(false);
         }
     };
     return (
@@ -28,7 +34,9 @@ const searchbytask = ({ query: initialQuery = "", onSearchResults }: Searchbytas
                     <input type="text" value={query} onChange={(e) => setQuery(e.target.value)}/>
                 </label>
                 <br/>
-                <button type="submit">Search</button>
+                <button type="submit" disabled={searching}>
+                    {searching ? "Searching..." : "Search"}
+                </button>
             </form>
         </div>
     );

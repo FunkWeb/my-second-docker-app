@@ -10,14 +10,28 @@ interface EdittaskProps {
 const edittasks = ({ id, title: initialTitle = "", description: initialDescription = "", onedit }: EdittaskProps) => {
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
+    const  [submitting, setSubmitting] = useState(false);
     const handleedit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const payload: { title?: string; description?: string } = {};
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+        if (trimmedTitle) payload.title = trimmedTitle;
+        if (trimmedDescription) payload.description = trimmedDescription;
+        if (Object.keys(payload).length === 0) {
+            console.log("No changes to update.");
+            return;
+        }
         try {
-            await updatetask(id, { title, description });
-            console.log(`Edited task ${id} with title: ${title} and description: ${description}`);
+            setSubmitting(true)
+            await updatetask(id, payload);
+            console.log(`Edited task ${id} with`, payload);
             if (onedit) onedit();
         } catch (error) {
             console.error(`Failed to edit task ${id}:`, error);
+        }
+        finally {
+            setSubmitting(false)
         }
     };
 
