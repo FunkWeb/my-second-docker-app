@@ -12,9 +12,10 @@ export class Apirepository {
             },
         });
         if (!response.ok) {
-                   const errorData = await response.json().catch(() => ({ message: response.statusText }));
-                    throw new Error(`Failed to fetch tasks: ${errorData.message || response.statusText}`);
-                }
+            const errorData = await response.json().catch(() => ({ message: response.statusText }));
+            console.error("Failed to fetch tasks:", errorData.message);
+            throw new Error(`Failed to fetch tasks: ${errorData.message || response.statusText}`);
+        }
         const data = await response.json();
         return data;
     }
@@ -29,7 +30,7 @@ export class Apirepository {
         return data;
     }
     async createTask(task: { title: string; description: string }) {
-        const response = await fetch(`${host}api/tasks`, {
+        const response = await fetch(`${host}/api/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +42,7 @@ export class Apirepository {
     }
 
     async updateTask(id: string, updates: { title?: string; description?: string }) {
-        const response = await fetch(`${host}api/tasks/${id}`, {
+        const response = await fetch(`${host}/api/tasks/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

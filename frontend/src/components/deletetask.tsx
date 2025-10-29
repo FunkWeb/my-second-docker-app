@@ -14,11 +14,16 @@ const deletetasks = ({ id }: DeleteTasksProps) => {
             console.error(`Failed to delete task with id ${taskId}:`, error);
         }
     }
-        if (id) {
-            handleDelete(id);
-        }
-
-    return <button onClick={() => handleDelete(id)}>Delete</button>;
-
+    return (
+        <button
+            onClick={() => {
+                if (id && window.confirm("Are you sure you want to delete this task?")) {
+                    handleDelete(id);
+                }
+            }}
+        >
+            Delete
+        </button>
+    );
 };
 export default deletetasks;

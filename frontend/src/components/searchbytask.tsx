@@ -1,18 +1,18 @@
 import {gettaskbyid} from "./apicalls.tsx";
 
 
-interface SearcbytaskProps {
+interface SearchbytaskProps {
     query: string;
-    onsearch?: (results: any[]) => void;
+    onSearchResults?: (results: any[]) => void;
 }
-const searcbytask = ({ query, onsearch }: SearcbytaskProps) => {
+const searchbytask = ({ query, onSearchResults }: SearchbytaskProps) => {
 
-    const handlesearch = async () => {
+    const handleSearch = async () => {
         try {
             const results = await gettaskbyid(query);
             console.log(`Searching tasks with query: ${query}`);
-            if (onsearch) {
-                onsearch(results);
+            if (onSearchResults) {
+                onSearchResults(results);
             }
         } catch (error) {
             console.error(`Failed to search tasks with query ${query}:`, error);
@@ -21,7 +21,7 @@ const searcbytask = ({ query, onsearch }: SearcbytaskProps) => {
     return (
         <div>
             <h2>Search Tasks</h2>
-            <form onSubmit={handlesearch}>
+            <form onSubmit={handleSearch}>
                 <label>
                     Query:
                     <input type="text" defaultValue={query}/>
@@ -32,4 +32,4 @@ const searcbytask = ({ query, onsearch }: SearcbytaskProps) => {
         </div>
     );
 }
-export default searcbytask;
+export default searchbytask;

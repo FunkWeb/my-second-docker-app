@@ -8,9 +8,9 @@ interface EdittaskProps {
 }
 const edittasks = ({ id, title, description, onedit }: EdittaskProps) => {
 
-    const handleedit = () => {
+    const handleedit = async () => {
         try {
-            updatetask(id, { title, description });
+           await updatetask(id, { title, description });
             console.log(`Editing task ${id} with title: ${title} and description: ${description}`);
 
         }
