@@ -35,18 +35,22 @@ export class TaskController {
 
   @Post('/')
   @HttpCode(201)
-  async createTask(@Body() body: { title: string; description?: string }) {
-    const { title, description } = body;
+  async createTask(@Body() body: { title: string; due_at: Date; description?: string }) {
+    const { title, due_at, description } = body;
 
     if (!title) {
       throw new BadRequestError('Title is required');
     }
+    if (!due_at) {
+      throw new BadRequestError('Due date is required');
+    }
 
     const job = await tasksQueue.add('create-task', {
       title,
+      due_at,
       description: description || ''
     });
-
+    console.log('Created job:', job.id);
     return {
       success: true,
       jobId: job.id

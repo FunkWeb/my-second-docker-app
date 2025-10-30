@@ -13,6 +13,7 @@ export function CreateTaskModal({ isOpen, onClose }: CreateTaskModalProps) {
   const { createTask } = useTasksContext();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState<Date | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,10 +32,12 @@ export function CreateTaskModal({ isOpen, onClose }: CreateTaskModalProps) {
       await createTask({
         title: title.trim(),
         description: description.trim() || undefined,
+        due_at: dueDate || new Date(),
       });
       
       setTitle('');
       setDescription('');
+      setDueDate(null);
       onClose();
     } catch (err) {
       setError('Failed to create task. Please try again.');
@@ -48,10 +51,21 @@ export function CreateTaskModal({ isOpen, onClose }: CreateTaskModalProps) {
     if (!isSubmitting) {
       setTitle('');
       setDescription('');
+      setDueDate(null);
       setError(null);
       onClose();
     }
   };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateString = e.target.value;
+    setDueDate(dateString ? new Date(dateString) : null);
+    console.log("Selected due date:", dateString);
+  };
+
+  const dateValue = dueDate 
+    ? dueDate.toISOString().split('T')[0] 
+    : '';
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} title="Create New Task">
@@ -84,6 +98,20 @@ export function CreateTaskModal({ isOpen, onClose }: CreateTaskModalProps) {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter task description (optional)"
             rows={4}
+            disabled={isSubmitting}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="task-due-date" className="form-label">
+            Due Date
+          </label>
+          <input
+            id="task-due-date"
+            type="date"
+            className="form-input"
+            value={dateValue}
+            onChange={handleDateChange}
             disabled={isSubmitting}
           />
         </div>

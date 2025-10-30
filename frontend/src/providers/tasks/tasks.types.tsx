@@ -8,6 +8,7 @@ export interface Task {
 
 export interface CreateTaskDto {
   title: string;
+  due_at: Date;
   description?: string;
 }
 

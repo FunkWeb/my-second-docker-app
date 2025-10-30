@@ -26,10 +26,10 @@ async function handleCreateTask(job: Job, data: Task) {
   const {title, description} = data;
 
   const result = await postgres.query(
-    `INSERT INTO tasks (title, description, status)
-     VALUES ($1, $2, $3)
+    `INSERT INTO tasks (title, due_at, description, status)
+     VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [title, description || '', 'todo']
+    [title, data.due_at, description || '', 'todo']
   );
 
   await job.updateProgress(100);
