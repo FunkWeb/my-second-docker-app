@@ -51,7 +51,6 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      // Refresh tasks after creation
       await fetchTasks();
     } catch (err) {
       setError((err as Error).message);
@@ -75,7 +74,6 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      // Refresh tasks after update
       await fetchTasks();
     } catch (err) {
       setError((err as Error).message);
@@ -95,7 +93,6 @@ export function TasksProvider({ children }: { children: ReactNode }) {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      // Refresh tasks after deletion
       await fetchTasks();
     } catch (err) {
       setError((err as Error).message);

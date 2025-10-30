@@ -5,25 +5,105 @@
 }
 
 .taskItem {
-    display: flex;
-    align-items: center;
     font-size: 18px;
-    color: #ffffff;
-    margin-bottom: 12px;
-    padding: 8px;
+    font-weight: bold;
+    color: var(--text-color);
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    margin: 8px 15px;
+    padding: 12px;
 }
 
 .taskItemCompleted {
-    background-color: #4c523a;
+    opacity: 0.65;
+}
+
+.taskHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
 }
 
 .bullet {
     margin-right: 10px;
     font-weight: bold;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.taskContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.taskTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .taskText {
     flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.taskDescription {
+    margin: 0;
+    font-size: 15px;
+    font-weight: normal;
+    color: var(--text-color);
+    opacity: 0.85;
+    line-height: 1.4;
+}
+
+.taskStatus {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.taskStatus--todo {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.taskStatus--in-progress {
+    background-color: rgba(245, 124, 0, 0.15);
+    color: #f57c00;
+}
+
+.taskStatus--done {
+    background-color: rgba(56, 142, 60, 0.15);
+    color: #388e3c;
+}
+
+.taskMeta {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.75;
+}
+
+.taskDueDate {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.taskOverdue {
+    color: var(--warning-color);
+    font-weight: 700;
+    opacity: 1;
 }
 
 .task-statsContainer {
