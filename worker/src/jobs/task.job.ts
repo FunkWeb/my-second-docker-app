@@ -20,7 +20,7 @@ export default async function taskJob(job: Job<Task>) {
   }
 }
 
-async function handleCreateTask(job: Job, data: any) {
+async function handleCreateTask(job: Job, data: Task) {
   await job.updateProgress(10);
 
   const {title, description} = data;
