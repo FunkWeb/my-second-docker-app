@@ -1,6 +1,7 @@
 .footer-component {
-    background: #333333;
+    background: var(--dark-color);
     padding: 20px 10px;
+    
 
     .footer-component-container {
         display: flex;

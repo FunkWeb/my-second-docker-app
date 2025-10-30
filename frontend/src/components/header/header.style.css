@@ -1,5 +1,5 @@
 .header-component {
-    background: #333333;
+    background: var(--dark-color);
     padding: 20px 10px;
 
     .header-component-container {
