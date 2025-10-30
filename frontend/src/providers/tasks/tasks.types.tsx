@@ -2,7 +2,7 @@ export interface Task {
   id: number;
   title: string;
   description: string;
-  status: 'pending' | 'in_progress' | 'completed';
+  status: 'todo' | 'in-progress' | 'done';
   created_at: string;
 }
 
@@ -14,8 +14,9 @@ export interface CreateTaskDto {
 
 export interface UpdateTaskDto {
   title?: string;
+  due_at?: Date;
   description?: string;
-  status?: 'pending' | 'in_progress' | 'completed';
+  status?: 'todo' | 'in-progress' | 'done';
 }
 
 export interface TasksContextValue {

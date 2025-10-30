@@ -16,8 +16,9 @@ function TasksContent() {
   const handleToggleTask = async (taskId: number) => {
     const task = tasks.find(t => t.id === taskId);
     if (task) {
-      const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+      const newStatus = task.status === 'done' ? 'todo' : 'done';
       await updateTask(taskId, { status: newStatus });
+      console.log(`Toggled task ${taskId} to status ${newStatus}`);
     }
   };
 
@@ -45,7 +46,7 @@ function TasksContent() {
               task={{
                 id: task.id,
                 text: task.title,
-                completed: task.status === 'completed'
+                completed: task.status === 'done'
               }}
               toggleTask={handleToggleTask}
             />
