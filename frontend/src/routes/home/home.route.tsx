@@ -13,7 +13,14 @@ function HomeContent() {
 
   return (
     <div className={"container"}>
-      <TodaysTasksList fetchedTasks={tasks as Task[]} />
+
+      {loading && <p>Loading tasks...</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+
+      <TodaysTasksList 
+        fetchedTasks={tasks as Task[]} 
+        updateTask={updateTask} 
+      />
     </div>
   );
 }

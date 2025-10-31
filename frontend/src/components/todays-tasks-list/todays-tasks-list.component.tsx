@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import type { Task } from '../../providers/tasks/tasks.types';
+import type { Task, UpdateTaskDto } from '../../providers/tasks/tasks.types';
 import { CheckCircle2, Circle, Trash2 } from 'lucide-react';
 import './todays-tasks-list.style.css';
 
 interface TodaysTasksListProps {
   fetchedTasks?: Task[];
+  updateTask: (id: number, updates: UpdateTaskDto) => void;
 }
 
-export default function TodaysTasksList({ fetchedTasks }: TodaysTasksListProps) {
+export default function TodaysTasksList({ fetchedTasks, updateTask }: TodaysTasksListProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
@@ -17,10 +18,21 @@ export default function TodaysTasksList({ fetchedTasks }: TodaysTasksListProps) 
   }, [fetchedTasks]);
 
   const toggleTask = (id: number) => {
-    setTasks(tasks.map(task => 
-      task.id === id ? { ...task, status: task.status === 'done' ? 'todo' : 'done' } : task
-    ));
-  };
+  setTasks(prev =>
+    prev.map(task =>
+      task.id === id
+        ? { ...task, status: task.status === 'done' ? 'todo' : 'done' }
+        : task
+    )
+  );
+
+  const toggled = tasks.find(task => task.id === id);
+    if (toggled) {
+      const newStatus = toggled.status === 'done' ? 'todo' : 'done';
+      updateTask(id, { status: newStatus });
+  }
+};
+
 
   const deleteTask = (id: number) => {
     setTasks(tasks.filter(task => task.id !== id));
