@@ -1,11 +1,10 @@
 .footer-component {
     background: var(--dark-color);
     padding: 20px 10px;
-    
+}
 
-    .footer-component-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+.footer-component-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
