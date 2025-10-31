@@ -7,4 +7,4 @@ export const redis = new Redis(REDIS_URL, {
   enableReadyCheck: true,
   lazyConnect: false,
 });
-//ioredis???
+//ioredis gir en utviklervennlig API som forenkler integreringen av Redis i Node.js-applikasjoner
