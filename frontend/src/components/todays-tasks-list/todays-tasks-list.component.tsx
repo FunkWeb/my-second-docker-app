@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { Task, UpdateTaskDto } from '../../providers/tasks/tasks.types';
-import { CheckCircle2, Circle, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import './todays-tasks-list.style.css';
+import { Checkbox } from '../checkbox/checkbox.component';
 
 interface TodaysTasksListProps {
   fetchedTasks?: Task[];
@@ -63,17 +64,7 @@ export default function TodaysTasksList({ fetchedTasks, updateTask }: TodaysTask
         ) : (
           tasks.map(task => (
             <div key={task.id} className="task-item">
-              <button
-                onClick={() => toggleTask(task.id)}
-                className="task-toggle-btn"
-              >
-                {task.status === 'done' ? (
-                  <CheckCircle2 size={24} className="icon-completed" />
-                ) : (
-                  <Circle size={24} />
-                )}
-              </button>
-
+              <Checkbox task={task} toggleTask={toggleTask} />
               <span className={`task-text ${task.status === 'done' ? 'task-text-completed' : ''}`}>
                 {task.title}
               </span>
