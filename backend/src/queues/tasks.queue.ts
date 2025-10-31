@@ -1,6 +1,7 @@
-import {Queue} from 'bullmq';
-import {redis} from '../redis.js';
+import { Queue } from 'bullmq';
+import { redis } from '../redis.js';
+import {TaskJobData} from "../types/task.js";
 
-const QUEUE_NAME = 'tasks';
-
-export const tasksQueue = new Queue(QUEUE_NAME, {connection: redis});
+export const tasksQueue = new Queue<TaskJobData>('tasks', {
+  connection: redis,
+});

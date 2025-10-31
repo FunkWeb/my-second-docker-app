@@ -7,6 +7,7 @@ import {useExpressServer} from 'routing-controllers';
 import {errorHandler} from './middlewares/error.handler.js';
 import {HealthController} from './controllers/health.controller.js';
 import {PingController} from "./controllers/ping.controller.js";
+import taskController from "./controllers/task.controller.js";
 
 const app = express();
 
@@ -16,10 +17,11 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 useExpressServer(app, {
-  routePrefix: '/api/v1',
-  controllers: [ // TODO: add more controllers
+  routePrefix: '/api',
+  controllers: [
     HealthController,
     PingController,
+    taskController
   ],
   validation: true,
   classTransformer: true,
