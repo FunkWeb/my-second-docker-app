@@ -1,7 +1,17 @@
+:root {
+    --primary-color: #96E6B3;
+    --secondary-color: #CCFCCB;
+    --background-color: #F1FFFA;
+    --text-color: #568259;
+    --dark-color: #464E47;
+    --warning-color: #f39c12;
+    --border-radius: 5px;
+}
+
 body {
     font: 16px Arial, sans-serif;
-    background: #1e1e1e;
-    color: #ffffff;
+    background: var(--background-color);
+    color: var(--text-color);
     padding: 0;
     margin: 0;
 }
@@ -19,7 +29,7 @@ main {
 
 .container {
     max-width: 1400px;
-    margin: 0 auto;
+    margin: 0 10px;
 }
 
 section {

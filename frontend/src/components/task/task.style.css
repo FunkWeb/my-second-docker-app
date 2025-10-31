@@ -1,1 +1,118 @@
-/* TODO: implement task component styles */
+.taskList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.taskItem {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-color);
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    margin: 8px;
+    padding: 12px;
+}
+
+.taskItemCompleted {
+    opacity: 0.65;
+}
+
+.taskHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.bullet {
+    margin-right: 10px;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.taskContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.taskTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.taskText {
+    flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.taskDescription {
+    margin: 0;
+    font-size: 15px;
+    font-weight: normal;
+    color: var(--text-color);
+    opacity: 0.85;
+    line-height: 1.4;
+}
+
+.taskStatus {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.taskStatus--todo {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.taskStatus--in-progress {
+    background-color: rgba(245, 124, 0, 0.15);
+    color: var(--text-color);
+}
+
+.taskStatus--done {
+    background-color: var(--text-color);
+    color: var(--secondary-color);
+}
+
+.taskMeta {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.75;
+}
+
+.taskDueDate {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.taskOverdue {
+    color: var(--warning-color);
+    font-weight: 700;
+    opacity: 1;
+}
+
+.task-statsContainer {
+    margin-top: 40px;
+}
+
+.task-statsText {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}

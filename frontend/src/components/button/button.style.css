@@ -1,7 +1,7 @@
 .button-component {
-    background-color: #4caf50;
+    background-color: var(--primary-color);
     border: none;
-    color: #ffffff;
+    color: var(--text-color);
     font-size: 16px;
     cursor: pointer;
     padding: 16px 48px;
