@@ -1,5 +1,5 @@
 // TODO: implement tasks provider
-import { useState, type ReactNode } from 'react';
+import { useState, useCallback, type ReactNode } from 'react';
 import { TasksContext } from './tasks.context';
 import type { Task, CreateTaskDto, UpdateTaskDto } from './tasks.types';
 
@@ -10,7 +10,7 @@ export function TasksProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchTasks() {
+  const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -33,7 +33,8 @@ export function TasksProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
+
 
   async function createTask(taskData: CreateTaskDto) {
     try {

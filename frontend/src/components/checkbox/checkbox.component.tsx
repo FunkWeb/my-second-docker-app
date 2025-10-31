@@ -6,7 +6,7 @@ export function Checkbox({ task, toggleTask }: { task: Task; toggleTask: (id: nu
   return (
     <input
       type="checkbox"
-      checked={task.completed}
+      checked={task.status === 'done'}
       onChange={() => toggleTask(task.id)}
       className="checkbox-component"
     />

@@ -45,11 +45,10 @@ function TasksContent() {
               key={task.id}
               task={{
                 id: task.id,
-                text: task.title,
-                description: task.description,
+                title: task.title,
+                description: task.description || '',
                 due_at: task.created_at,
                 status: task.status,
-                completed: task.status === 'done'
               }}
               toggleTask={handleToggleTask}
             />

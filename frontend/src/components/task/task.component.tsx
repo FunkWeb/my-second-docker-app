@@ -12,7 +12,7 @@ export default function TaskItem({ task, toggleTask }: TaskItemProps) {
   const formatDueDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    const isOverdue = date < now && !task.completed;
+    const isOverdue = date < now && task.status !== 'done';
     
     return {
       formatted: date.toLocaleDateString('en-US', { 
@@ -36,13 +36,13 @@ export default function TaskItem({ task, toggleTask }: TaskItemProps) {
 
   return (
     <li 
-      className={`taskItem ${task.completed ? 'taskItemCompleted' : ''}`}
+      className={`taskItem ${task.status === 'done' ? 'taskItemCompleted' : ''}`}
     >
       <div className="taskHeader">
         <span className="bullet">-</span>
         <div className="taskContent">
           <div className="taskTitleRow">
-            <span className="taskText">{task.text}</span>
+            <span className="taskText">{task.title}</span>
             <span className={`taskStatus taskStatus--${task.status}`}>
               {getStatusLabel(task.status)}
             </span>

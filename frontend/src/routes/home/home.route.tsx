@@ -1,29 +1,27 @@
-import {Button} from "../../components/button/button.component.tsx";
-import {useState} from "react";
+import {useEffect} from "react";
+import TodaysTasksList from "../../components/todays-tasks-list/todays-tasks-list.component";
+import { useTasksContext } from "../../providers/tasks/tasks.context";
+import { TasksProvider } from "../../providers/tasks/tasks.provider";
+import type { Task } from "../../providers/tasks/tasks.types";
 
-export default function Home() {
-  let [count, setCount] = useState(0);
+function HomeContent() {
+  const { tasks, loading, error, fetchTasks, updateTask } = useTasksContext();
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
   return (
     <div className={"container"}>
-      <section>
-        <h2>Home Page</h2>
-        <p>This is the home page of the application.</p>
-      </section>
-      <section>
-        <h3>Information</h3>
-        <p>This is built as a Single Page Application (SPA). What's that?</p>
-      </section>
-      <section>
-        <h3>Questions</h3>
-        <p>When you refresh the page, or navigate between pages, the Interactive Button count resets. Why?</p>
-        <p>When you navigate between pages, the useAuth context stays the same. Why?</p>
-      </section>
-      <section>
-        <h3>Interactive Button</h3>
-        <Button onClick={() => setCount(++count)}>Click me!</Button>
-        <p>Button clicked {count} times.</p>
-      </section>
+      <TodaysTasksList fetchedTasks={tasks as Task[]} />
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <TasksProvider>
+      <HomeContent />
+    </TasksProvider>
   );
 }
