@@ -10,23 +10,23 @@ export default async function listenToTasks() {
   });
 
   worker.on('ready', () => {
-    // TODO: on task ready
+    console.log(`Worker is ready and listening to queue: ${QUEUE_NAME}`);
   });
 
   worker.on('active', (job: Job) => {
-    // TODO: on task active
+    console.log(`Job ${job.id} is now active`);
   });
 
   worker.on('completed', (job: Job, result: unknown) => {
-    // TODO: on task completed
+    console.log(`Job ${job.id} completed successfully`);
   });
 
   worker.on('failed', (job: Job | undefined, err: Error) => {
-    // TODO: on task failed
+    console.error(`Job ${job?.id} failed with error: ${err.message}`);
   });
 
   worker.on('error', (err: Error) => {
-    // TODO: on task error
+    console.error(`Worker error: ${err.message}`);
   });
 
   return worker;
