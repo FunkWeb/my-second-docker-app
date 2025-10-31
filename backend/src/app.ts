@@ -7,6 +7,7 @@ import {useExpressServer} from 'routing-controllers';
 import {errorHandler} from './middlewares/error.handler.js';
 import {HealthController} from './controllers/health.controller.js';
 import {PingController} from "./controllers/ping.controller.js";
+import {TaskController} from "./controllers/task.controller.js";
 
 const app = express();
 
@@ -17,9 +18,13 @@ app.use(morgan('dev'));
 
 useExpressServer(app, {
   routePrefix: '/api/v1',
-  controllers: [ // TODO: add more controllers
-    HealthController,
-    PingController,
+  controllers: [
+
+  HealthController,
+
+   PingController,
+
+    TaskController,
   ],
   validation: true,
   classTransformer: true,
@@ -29,3 +34,4 @@ useExpressServer(app, {
 app.use(errorHandler);
 
 export default app;
+

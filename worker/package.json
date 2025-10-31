@@ -8,8 +8,8 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "bullmq": "^5",
-    "ioredis": "^5",
+    "bullmq": "^5.61.2",
+    "ioredis": "^5.8.2",
     "pg": "^8",
     "pino": "^10"
   },

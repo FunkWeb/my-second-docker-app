@@ -1,18 +1,36 @@
-import listenToPing from './listeners/ping.listener';
-import listenToTasks from './listeners/task.listener';
+import listenToTasks from './listeners/task.listener.js';
+import { redis } from './redis.js';
+import { postgres } from './postgres.js';
+async function startWorker() {
+    console.log('Starting Task Worker Service...');
 
-async function main() {
-  const pingListener = await listenToPing();
-  const taskListener = await listenToTasks();
+    try {
+        await redis.ping();
+        console.log('[Connection] Redis connection successful.');
+    } catch (e) {
+        console.error('[Connection] Could not connect to Redis:', e);
+    }
 
-  process.on('SIGTERM', async () => {
-    await pingListener.close();
-    await taskListener.close();
+    try {
+        await postgres.query('SELECT 1');
+        console.log('[Connection] Postgres connection successful.');
+    } catch (e) {
+         console.error('[Connection] Could not connect to Postgres:', e);
+    }
 
-    process.exit(0);
-  });
 
-  console.log('Worker is running and listening to queues...');
+    const taskWorker = await listenToTasks();
+
+    process.on('SIGINT', async () => {
+        console.log('[Worker] Worker shutting down...');
+        await taskWorker.close();
+        process.exit(0);
+    });
+
+    console.log('[Worker] Task Worker running...');
 }
 
-void main();
+startWorker().catch(err => {
+    console.error('Fatal error starting worker:', err);
+    process.exit(1);
+});
