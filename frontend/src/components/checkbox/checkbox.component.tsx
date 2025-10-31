@@ -11,7 +11,7 @@ return (
     className="task-toggle-btn"
     >
     {task.status === 'done' ? (
-    <CheckSquare size={24} />
+    <CheckSquare size={24} className="icon-completed" />
     ) : (
     <Square size={24} />
     )}
