@@ -19,10 +19,11 @@ app.use(morgan('dev'));
 useExpressServer(app, {
   routePrefix: '/api/v1',
   controllers: [
+
   HealthController,
 
-
    PingController,
+
     TaskController,
   ],
   validation: true,

@@ -4,6 +4,11 @@ import { TaskRepository } from '../repositories/task.repository.js';
 
 const taskRepository = new TaskRepository();
 
+
+function isInvalidTaskId(id: number): boolean {
+    return isNaN(id) || id === undefined || id === null || id <= 0 || !Number.isInteger(id);
+}
+
 @JsonController()
 export class TaskController {
 
@@ -14,8 +19,8 @@ export class TaskController {
 
     @Get('/task/:id')
     public async getTaskById(@Param('id') id: number) {
-        if (isNaN(id)) {
-            throw { httpCode: 400, message: 'Invalid task ID format.' };
+        if (isInvalidTaskId(id)) {
+            throw { httpCode: 400, message: 'Invalid task ID format. Must be a positive integer.' };
         }
 
         const task = await taskRepository.findById(id);
@@ -25,7 +30,6 @@ export class TaskController {
         }
         return task;
     }
-
 
     @Post('/task')
     @HttpCode(202)
@@ -42,12 +46,11 @@ export class TaskController {
         };
     }
 
-
     @Put('/task/:id')
     @HttpCode(202)
     public async updateTask(@Param('id') id: number, @Body() data: TaskUpdateDTO) {
-        if (isNaN(id)) {
-            throw { httpCode: 400, message: 'Invalid task ID format.' };
+        if (isInvalidTaskId(id)) {
+            throw { httpCode: 400, message: 'Invalid task ID format. Must be a positive integer.' };
         }
         if (Object.keys(data).length === 0) {
              throw { httpCode: 400, message: 'No update data provided in the request body.' };
@@ -61,12 +64,11 @@ export class TaskController {
         };
     }
 
-
     @Delete('/task/:id')
     @HttpCode(202)
     public async deleteTask(@Param('id') id: number) {
-        if (isNaN(id)) {
-            throw { httpCode: 400, message: 'Invalid task ID format.' };
+        if (isInvalidTaskId(id)) {
+            throw { httpCode: 400, message: 'Invalid task ID format. Must be a positive integer.' };
         }
 
         await taskRepository.deleteJob(id);
