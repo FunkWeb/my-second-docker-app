@@ -47,7 +47,7 @@ function TasksContent() {
                 id: task.id,
                 title: task.title,
                 description: task.description || '',
-                due_at: task.created_at,
+                due_at: task.due_at,
                 status: task.status,
               }}
               toggleTask={handleToggleTask}

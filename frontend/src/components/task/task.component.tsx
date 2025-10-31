@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type { Task } from './task.types.ts';
 import { Checkbox } from '../checkbox/checkbox.component.tsx';
 
@@ -9,22 +10,25 @@ interface TaskItemProps {
 }
 
 export default function TaskItem({ task, toggleTask }: TaskItemProps) {
-  const formatDueDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDueDate = useMemo(() => (date: Date) => {
+    const formattedDate = new Date(date);
     const now = new Date();
-    const isOverdue = date < now && task.status !== 'done';
-    
+    const isOverdue = formattedDate < now && task.status !== 'done';
+
     return {
-      formatted: date.toLocaleDateString('en-US', { 
+      formatted: formattedDate.toLocaleDateString('en-US', { 
         month: 'short', 
         day: 'numeric',
-        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+        year: formattedDate.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
       }),
       isOverdue
     };
-  };
+  }, [task.status]);
 
-  const { formatted: dueDate, isOverdue } = formatDueDate(task.due_at);
+  const { formatted: 
+    dueDate,
+    isOverdue 
+  } = formatDueDate(task.due_at);
 
   const getStatusLabel = (status: Task['status']) => {
     return {

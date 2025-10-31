@@ -13,7 +13,8 @@ export default function TodaysTasksList({ fetchedTasks, updateTask }: TodaysTask
 
     useEffect(() => {
     if (fetchedTasks) {
-      setTasks(fetchedTasks);
+      const today = new Date().toISOString().split('T')[0];
+      setTasks(fetchedTasks.filter(task => task.due_at.toString().startsWith(today)));
     }
   }, [fetchedTasks]);
 
