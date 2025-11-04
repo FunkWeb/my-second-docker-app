@@ -1,3 +1,11 @@
 export type Task = {
-  // TODO: define the structure of the task payload
+  id?: number;
+  title: string;
+  description?: string;
+  completed?: boolean;
+};
+
+export type TaskAction = {
+  action: 'create' | 'update' | 'delete';
+  data: Task;
 };
