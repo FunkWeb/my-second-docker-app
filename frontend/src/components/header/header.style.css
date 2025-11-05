@@ -1,19 +1,19 @@
 .header-component {
-    background: #333333;
-    padding: 20px 0;
+    background: linear-gradient(to bottom, #6181a2 , var(--dark-color));
+    padding: 20px 10px;
+}
 
-    .header-component-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+.header-component-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .header-component-item {
-            display: inline-block;
+.header-component-item {
+    display: inline-block;
+}
 
-            .button-component {
-                font-size: 12px;
-                padding: 12px 24px;
-            }
-        }
-    }
+.header-component-item .button-component {
+    font-size: 12px;
+    padding: 12px 24px;
 }

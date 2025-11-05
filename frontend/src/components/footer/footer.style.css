@@ -1,10 +1,10 @@
 .footer-component {
-    background: #333333;
-    padding: 20px 0;
+    background: linear-gradient(to top, #6181a2 , var(--dark-color));
+    padding: 20px 10px;
+}
 
-    .footer-component-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+.footer-component-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
