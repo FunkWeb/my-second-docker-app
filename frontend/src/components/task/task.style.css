@@ -1,1 +1,30 @@
-/* TODO: implement task component styles */
+
+.task-card {
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.task-card h3 {
+    font-size: 1.1em;
+    margin-top: 0;
+}
+
+.task-card {
+    width: 100%;
+}
+
+.task-card.todo {
+    border-left: 5px solid var(--primary-color, #3498db);
+}
+
+.task-card.in_progress {
+    border-left: 5px solid var(--warning-color, #f39c12);
+}
+
+.task-card.done {
+    border-left: 5px solid var(--success-color, #2ecc71);
+    opacity: 0.7;
+}

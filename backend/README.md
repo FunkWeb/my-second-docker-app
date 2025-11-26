@@ -26,7 +26,6 @@ npm run dev
 npm run build
 npm run start
 ```
-
 ## Health/Test Routes
 
 GET `/api/v1/health`  
