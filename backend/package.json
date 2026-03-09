@@ -21,11 +21,12 @@
     "routing-controllers": "^0"
   },
   "devDependencies": {
+
     "@types/cors": "^2",
     "@types/express": "^5",
     "@types/morgan": "^1",
-    "@types/multer": "^2",
-    "@types/node": "^24",
+
+
     "@types/pg": "^8",
     "tsx": "^4",
     "typescript": "^5"
